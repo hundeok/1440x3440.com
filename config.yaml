@@ -1,0 +1,105 @@
+# ──────────────────────────────────────────────
+# PortraitFrame — config.yaml
+# 이 파일을 수정해 모든 동작을 제어합니다.
+# ──────────────────────────────────────────────
+
+# 라이브러리 경로 설정
+library:
+  path: "./library"
+  images_dir: "images"
+  originals_dir: "originals"
+
+cloud:
+  enabled: true
+  base_url: "https://pub-0c293c2317874e6db6239ef7fb9d1990.r2.dev"
+
+# 고정 규격 — 절대 변경하지 않는다
+target:
+  width: 1440
+  height: 3440
+
+# Viewer 설정
+viewer:
+  interval: 5           # 슬라이드 전환 간격 (초)
+  mode: random           # random | sequential
+  effect: "Zoom"          # 효과: None, Fade, Dip, SlideL, SlideR, SlideU, WipeR, WipeD, Zoom
+  transition_ms: 1000    # 효과 전환 시간 (ms)
+  bg_color: "#000000"
+  wakelock: true         # 뷰어 실행 시 화면 켜짐 유지
+
+# Collector 공통 설정
+collector:
+  rate_limit: 1.0        # 요청 사이 대기 (초)
+  timeout: 30            # 다운로드 타임아웃 (초)
+  max_retries: 3
+  workers: 3             # 병렬 다운로드 스레드 수 (1=순차)
+  user_agent: "PortraitFrame/1.0 (personal wallpaper collector)"
+  # 원본 파일 보관 여부 (false면 정규화 후 삭제)
+  keep_originals: false
+
+# 소스별 설정
+sources:
+  wallhaven:
+    enabled: true
+    api_key: ""
+    purity: "110"       # 100=SFW / 110=SFW+Sketchy / 111=All
+    categories: "100"   # General only
+
+  # Reddit — 403 이슈로 비활성화
+  reddit:
+    enabled: false
+
+  # Flickr — https://www.flickr.com/services/api 에서 무료 key 발급
+  flickr:
+    enabled: false
+    api_key: ""
+    queries:
+      - "portrait vertical"
+      - "architecture interior"
+      - "nature forest vertical"
+      - "night city rain"
+      - "dark abstract"
+
+  # ArtStation — API key 불필요
+  artstation:
+    enabled: true
+    pages_per_section: 3   # trending + latest 각각 몇 페이지
+
+  # Unsplash — https://unsplash.com/developers 에서 무료 key 발급
+  unsplash:
+    enabled: true
+    access_key: ""
+    queries:
+      - "architecture"
+      - "nature forest"
+      - "space galaxy"
+      - "city rain night"
+      - "abstract dark"
+      - "mountain landscape"
+
+  # Pexels — https://www.pexels.com/api 에서 무료 key 발급
+  pexels:
+    enabled: true
+    api_key: ""
+    queries:
+      - "portrait architecture"
+      - "dark forest"
+      - "night city"
+      - "space nebula"
+      - "abstract"
+
+# 품질 필터
+quality:
+  min_quality_score: 0.25   # 0.0~1.0, 이 이하는 탈락
+  blur_threshold: 60.0      # Laplacian variance 이하 → 블러 탈락
+  blank_threshold: 6.0      # 픽셀 stddev 이하 → 단색 탈락
+  min_file_size_kb: 50      # 파일 크기 최소값 (KB)
+
+# 중복 제거
+dedup:
+  phash_threshold: 8        # Hamming distance, 이하 → 중복
+
+# 로그
+log:
+  level: INFO               # DEBUG | INFO | WARNING | ERROR
+  file: ./logs/collector.log
