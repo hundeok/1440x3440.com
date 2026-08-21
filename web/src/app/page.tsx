@@ -79,6 +79,38 @@ export default function Home() {
         </div>
       </div>
       
+      {/* README Window */}
+      <div className="mac-window" style={{ maxWidth: '800px', marginTop: '-1rem', position: 'relative', zIndex: 10 }}>
+        <div className="mac-titlebar">
+          <div className="mac-close-btn"></div>
+          <div className="mac-titlebar-text">README.txt</div>
+        </div>
+        <div className="mac-content" style={{ background: '#fff', padding: '2rem', textAlign: 'left' }}>
+          <p style={{ margin: '0 0 1.5rem 0', fontWeight: 'bold', fontSize: '1.2rem', textTransform: 'uppercase' }}>How to use this thing:</p>
+          
+          <ul style={{ listStyleType: 'none', padding: 0, margin: 0, lineHeight: '2.5', fontSize: '1.1rem' }}>
+            <li>
+              <strong style={{ background: '#000', color: '#fff', padding: '4px 8px', border: '2px solid #000', marginRight: '10px' }}>[TAB]</strong> 
+              Toggle Options Menu (because visible buttons are ugly)
+            </li>
+            <li>
+              <strong style={{ background: '#000', color: '#fff', padding: '4px 8px', border: '2px solid #000', marginRight: '10px' }}>[SPACE]</strong> 
+              Force Next Image (if you're impatient)
+            </li>
+            <li>
+              <strong style={{ background: '#000', color: '#fff', padding: '4px 8px', border: '2px solid #000', marginRight: '10px' }}>[ESC]</strong> 
+              Close App
+            </li>
+          </ul>
+          
+          <div style={{ margin: '2rem 0 0 0', borderTop: '2px dashed #000', paddingTop: '1.5rem', fontSize: '1rem', lineHeight: '1.6' }}>
+            <strong>MECHANISM:</strong><br/>
+            This app fetches a manifest (`images.json`) directly from a public Cloudflare R2 bucket. It caches images strictly to RAM up to a specified limit. Slide intervals and playlist sync happen automatically in the background. <br/><br/>
+            * Don't email me for customer support. I made this for myself.
+          </div>
+        </div>
+      </div>
+      
       <div style={{ textAlign: 'center', marginTop: '4rem', fontWeight: 'bold', marginBottom: '2rem' }}>
         built by a guy with a spare 1440x3440 monitor.
       </div>
