@@ -56,4 +56,4 @@ python viewer.py
 ## Support
 
 If this ridiculously specific app saved your spare monitor from gathering dust, consider helping with the cloud server costs!
-[☕ Buy me a coffee](#)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hdcho)
