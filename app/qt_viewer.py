@@ -1,34 +1,34 @@
-import sys
-import time
 import json
-import random
 import logging
-import subprocess
-import threading
-import urllib.request
-import urllib.error
-import ssl
 import os
+import random
+import ssl
+import subprocess
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Dict, Optional
 
-from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal, QPropertyAnimation, QRectF, QVariantAnimation
-from PyQt6.QtGui import QPixmap, QImage, QColor, QFont, QPainter, QKeyEvent, QMouseEvent, QShortcut, QKeySequence, QImageReader
-from PyQt6.QtWidgets import (
-    QMainWindow, QGraphicsScene, QGraphicsView, 
-    QGraphicsPixmapItem, QGraphicsTextItem, QGraphicsRectItem, QGraphicsOpacityEffect
-)
+from PyQt6.QtCore import (QPropertyAnimation, QRectF, Qt, QThread, QTimer,
+                          QVariantAnimation, pyqtSignal)
+from PyQt6.QtGui import (QColor, QFont, QImage, QImageReader, QKeySequence,
+                         QMouseEvent, QPainter, QPixmap, QShortcut)
+from PyQt6.QtWidgets import (QGraphicsOpacityEffect, QGraphicsPixmapItem,
+                             QGraphicsRectItem, QGraphicsScene,
+                             QGraphicsTextItem, QGraphicsView, QMainWindow)
 
-from app.config import AppConfig, ViewerConfig
+from app.config import AppConfig
 
 logger = logging.getLogger(__name__)
 
-INTERVALS       = [5, 10, 30, 60, 180, 300, 600, 1800, 3600]
+INTERVALS = [5, 10, 30, 60, 180, 300, 600, 1800, 3600]
 INTERVAL_LABELS = ["5s", "10s", "30s", "1m", "3m", "5m", "10m", "30m", "1h"]
-EFFECTS         = ["None", "Fade", "Dip", "Slide L", "Slide U", "Wipe R", "Wipe D", "Zoom", "Expand"]
-TIMERS          = ["Off", "30m", "1h", "2h", "4h", "8h"]
-TIMER_SECS      = [0, 1800, 3600, 7200, 14400, 28800]
-ROW_LABELS      = ["⏱  Interval", "✦  Effect", "◔  Sleep", "☼  Wakelock"]
+EFFECTS = ["None", "Fade", "Dip", "Slide L", "Slide U", "Wipe R", "Wipe D", "Zoom", "Expand"]
+TIMERS = ["Off", "30m", "1h", "2h", "4h", "8h"]
+TIMER_SECS = [0, 1800, 3600, 7200, 14400, 28800]
+ROW_LABELS = ["⏱  Interval", "✦  Effect", "◔  Sleep", "☼  Wakelock"]
+
 
 class ImageLoader(QThread):
     ready = pyqtSignal(dict, QImage, bool, float)
@@ -55,12 +55,12 @@ class ImageLoader(QThread):
         try:
             t0 = time.time()
             filename = self.entry["file"]
-            
+
             if self.cfg.cloud.enabled:
                 cache_dir = Path(os.path.expanduser("~/Library/Caches/PortraitFrame/library/images"))
                 cache_dir.mkdir(parents=True, exist_ok=True)
                 path = str(cache_dir / filename)
-                
+
                 if not os.path.exists(path):
                     # images_dir 이름(예: 1440x3440 images)을 URL 인코딩하여 동적 적용
                     import urllib.parse
@@ -79,14 +79,14 @@ class ImageLoader(QThread):
                     os.utime(path, None)
             else:
                 path = str(self.cfg.images_dir / filename)
-            
+
             reader = QImageReader(path)
             reader.setAutoTransform(True)
             img = reader.read()
-            
+
             if not img.isNull():
                 img = img.convertToFormat(QImage.Format.Format_RGB32)
-                
+
             load_ms = (time.time() - t0) * 1000
             self.ready.emit(self.entry, img, self.is_first, load_ms)
         except Exception as e:
@@ -98,14 +98,14 @@ class PortraitViewer(QMainWindow):
         super().__init__()
         self.cfg = cfg
         self.vc = cfg.viewer
-        
+
         self.setWindowTitle("Portrait Frame (PyQt6)")
         self.setStyleSheet("background-color: black;")
-        
+
         # ── UI 셋업 ────────────────────────────────────────────────
         self.scene = QGraphicsScene(self)
         self.scene.setBackgroundBrush(QColor(0, 0, 0))
-        
+
         self.view = QGraphicsView(self.scene)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -114,13 +114,13 @@ class PortraitViewer(QMainWindow):
         self.view.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.view.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
         self.setCentralWidget(self.view)
-        
+
         # ── 아이템 레이어 ──────────────────────────────────────────
         self.prev_item = QGraphicsPixmapItem()
         self.cur_item = QGraphicsPixmapItem()
         self.scene.addItem(self.prev_item)
         self.scene.addItem(self.cur_item)
-        
+
         # OSD
         self.osd_text_item = QGraphicsTextItem()
         self.osd_text_item.setDefaultTextColor(QColor(255, 255, 255))
@@ -143,7 +143,7 @@ class PortraitViewer(QMainWindow):
         self.settings_text_item.setZValue(102)
         self.settings_text_item.hide()
         self.scene.addItem(self.settings_text_item)
-        
+
         # ── 단축키 바인딩 (QShortcut 사용 - Tab 포커스 이슈 완벽 회피) ──────────
         QShortcut(QKeySequence("Tab"), self).activated.connect(self._toggle_settings)
         QShortcut(QKeySequence("Space"), self).activated.connect(lambda: self._on_right(force_next=True))
@@ -155,56 +155,56 @@ class PortraitViewer(QMainWindow):
         QShortcut(QKeySequence("F3"), self).activated.connect(self._toggle_debug)
         QShortcut(QKeySequence("Esc"), self).activated.connect(self._quit)
         QShortcut(QKeySequence("Q"), self).activated.connect(self._quit)
-        
+
         # ── 애니메이션 ─────────────────────────────────────────────
         self.opacity_effect_cur = QGraphicsOpacityEffect()
         self.cur_item.setGraphicsEffect(self.opacity_effect_cur)
         self.opacity_effect_prev = QGraphicsOpacityEffect()
         self.prev_item.setGraphicsEffect(self.opacity_effect_prev)
-        
+
         self.anim = QVariantAnimation(self)
         self.anim.setDuration(self.vc.transition_ms)
         self.anim.valueChanged.connect(self._on_anim_step)
         self.anim.finished.connect(self._on_anim_finished)
-        
+
         self._prev_base_scale = 1.0
         self._cur_base_scale = 1.0
         self._prev_base_pos = (0, 0)
         self._cur_base_pos = (0, 0)
-        
+
         # ── 플레이리스트 & 상태 변수 ───────────────────────────────
         self._playlist = []
         self._db = {}
         self._idx = 0
         self._cur_entry: Optional[Dict] = None
         self._last_load_ms: float = 0.0
-        
+
         self._paused: bool = False
         self._settings_visible: bool = False
-        
+
         self._settings_row = 0
         self._iv = INTERVALS.index(self.vc.interval) if self.vc.interval in INTERVALS else 3
         self._ef = EFFECTS.index(self.vc.effect) if self.vc.effect in EFFECTS else 0
         self._tm = 0
-        
+
         # ── 수면/전원 타이머 ───────────────────────────────────────
         self._sleep_timer: Optional[QTimer] = None
         self._caffeinate_proc: Optional[subprocess.Popen] = None
         self._apply_wakelock(self.vc.wakelock)
-        
+
         # ── 갱신 타이머 ────────────────────────────────────────────
         self.slide_timer = QTimer(self)
         self.slide_timer.timeout.connect(self._on_slide_timeout)
         self.time_left = self.vc.interval
-        
+
         self.hide_timer = QTimer(self)
         self.hide_timer.setSingleShot(True)
         self.hide_timer.timeout.connect(self.osd_text_item.hide)
-        
+
         self.settings_hide_timer = QTimer(self)
         self.settings_hide_timer.setSingleShot(True)
         self.settings_hide_timer.timeout.connect(self._hide_menus)
-        
+
         # 실행 시작 (세로 모니터 비율 1440x3440에 맞춰 400x955로 초기화)
         self._load_playlist()
         if self.vc.mode == "random":
@@ -246,19 +246,19 @@ class PortraitViewer(QMainWindow):
                 return
             with jp.open("r", encoding="utf-8") as f:
                 self._db = json.load(f)
-                
+
         self._playlist = [
             img for img in self._db.get("images", [])
             if not img.get("rejected", False)
         ]
-        
+
         # 로컬 모드일 때만 실제 파일 존재 여부 검사
         if not self.cfg.cloud.enabled:
             self._playlist = [
                 img for img in self._playlist
                 if (self.cfg.images_dir / img.get("file", "")).exists()
             ]
-            
+
         logger.info("Playlist: %d images", len(self._playlist))
 
     def _get_entry(self, delta: int) -> Optional[dict]:
@@ -289,7 +289,7 @@ class PortraitViewer(QMainWindow):
         self._last_load_ms = load_ms
         self._cur_entry = entry
         pixmap = QPixmap.fromImage(qimg)
-        
+
         if EFFECTS[self._ef] != "None" and not is_first and not self.cur_item.pixmap().isNull():
             # 이전 이미지 백업
             self.prev_item.setPixmap(self.cur_item.pixmap())
@@ -299,13 +299,13 @@ class PortraitViewer(QMainWindow):
             self.prev_item.setPos(*self._prev_base_pos)
             self.prev_item.show()
             self.opacity_effect_prev.setOpacity(1.0)
-            
+
             # 새 이미지 세팅
             self.cur_item.setPixmap(pixmap)
             self._fit_item(self.cur_item)
             self._cur_base_scale = self.cur_item.scale()
             self._cur_base_pos = (self.cur_item.pos().x(), self.cur_item.pos().y())
-            
+
             # 애니메이션 시작
             self.anim.stop()
             self.anim.setStartValue(0.0)
@@ -330,7 +330,7 @@ class PortraitViewer(QMainWindow):
 
         if effect in ("Fade", "Wipe R", "Wipe D"):
             self.opacity_effect_cur.setOpacity(t)
-            
+
         elif effect == "Dip":
             if t < 0.5:
                 self.opacity_effect_prev.setOpacity(1.0 - (t * 2.0))
@@ -338,19 +338,19 @@ class PortraitViewer(QMainWindow):
             else:
                 self.cur_item.show()
                 self.opacity_effect_cur.setOpacity((t - 0.5) * 2.0)
-                
+
         elif effect == "Slide L":
             offset = t * w
             self.prev_item.setPos(self._prev_base_pos[0] - offset, self._prev_base_pos[1])
             self.cur_item.setPos(self._cur_base_pos[0] + w - offset, self._cur_base_pos[1])
             self.opacity_effect_cur.setOpacity(1.0)
-            
+
         elif effect == "Slide U":
             offset = t * h
             self.prev_item.setPos(self._prev_base_pos[0], self._prev_base_pos[1] - offset)
             self.cur_item.setPos(self._cur_base_pos[0], self._cur_base_pos[1] + h - offset)
             self.opacity_effect_cur.setOpacity(1.0)
-            
+
         elif effect == "Zoom":
             s = 1.0 + t * 0.08
             self.prev_item.setScale(self._prev_base_scale * s)
@@ -358,7 +358,7 @@ class PortraitViewer(QMainWindow):
             py = self._prev_base_pos[1] - (self.prev_item.pixmap().height() * self._prev_base_scale * (s - 1.0)) / 2
             self.prev_item.setPos(px, py)
             self.opacity_effect_cur.setOpacity(t)
-            
+
         elif effect == "Expand":
             s = max(0.01, t)
             self.cur_item.setScale(self._cur_base_scale * s)
@@ -371,7 +371,7 @@ class PortraitViewer(QMainWindow):
         self.prev_item.hide()
         # [Optimization 1] VRAM 즉각 반환: 애니메이션 종료 직후 이전 이미지 텍스처 해제 (RAM/VRAM 50% 절감)
         self.prev_item.setPixmap(QPixmap())
-        
+
         self.cur_item.setPos(*self._cur_base_pos)
         self.cur_item.setScale(self._cur_base_scale)
         self.opacity_effect_cur.setOpacity(1.0)
@@ -380,23 +380,23 @@ class PortraitViewer(QMainWindow):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._fit_images()
-        
+
     def _fit_images(self):
         rect = self.view.viewport().rect()
         self.scene.setSceneRect(QRectF(rect))
-        
+
         self._fit_item(self.prev_item)
         self._fit_item(self.cur_item)
         self._cur_base_scale = self.cur_item.scale()
         self._cur_base_pos = (self.cur_item.pos().x(), self.cur_item.pos().y())
-        
+
         # Settings Text 위치 업데이트 (중앙 정렬)
         if self._settings_visible:
             w = self.settings_text_item.boundingRect().width()
             h = self.settings_text_item.boundingRect().height()
             text_y = rect.height() - h - 30
             self.settings_text_item.setPos((rect.width() - w) / 2, text_y)
-            
+
             bg_h = h + 60
             self.settings_bg_item.setRect(0, rect.height() - bg_h, rect.width(), bg_h)
 
@@ -465,16 +465,16 @@ class PortraitViewer(QMainWindow):
         for i, (label, val) in enumerate(zip(ROW_LABELS, vals)):
             prefix = "▶ " if i == self._settings_row else "  "
             lines.append(f"{prefix}{label:<15} {val}")
-        
+
         self.settings_text_item.setPlainText("\n".join(lines))
         self.settings_text_item.show()
-        
+
         rect = self.view.viewport().rect()
         w = self.settings_text_item.boundingRect().width()
         h = self.settings_text_item.boundingRect().height()
         text_y = rect.height() - h - 30
         self.settings_text_item.setPos((rect.width() - w) / 2, text_y)
-        
+
         bg_h = h + 60
         self.settings_bg_item.setRect(0, rect.height() - bg_h, rect.width(), bg_h)
         self.settings_bg_item.show()
@@ -548,7 +548,7 @@ class PortraitViewer(QMainWindow):
 
     def _quit(self):
         self.close()
-        
+
     def closeEvent(self, event):
         # 1. 모든 타이머 정지 (메모리 릭 방지)
         if self._sleep_timer:
@@ -557,17 +557,17 @@ class PortraitViewer(QMainWindow):
         self.hide_timer.stop()
         if hasattr(self, 'settings_hide_timer'):
             self.settings_hide_timer.stop()
-        
+
         # 2. 진행 중인 애니메이션 강제 종료 (QVariantAnimation C++ 파괴 충돌 방지)
         if hasattr(self, 'anim'):
             self.anim.stop()
-            
+
         # 3. Wakelock 해제
         self._apply_wakelock(False)
-        
+
         # 4. 백그라운드 스레드 안전 종료 대기 (Destroyed while thread is running 에러 방지)
         if hasattr(self, 'loader') and self.loader.isRunning():
             self.loader.quit()
-            self.loader.wait() # 200ms 시간 제한 해제 (대용량 이미지 읽기 완료 보장)
-            
+            self.loader.wait()  # 200ms 시간 제한 해제 (대용량 이미지 읽기 완료 보장)
+
         super().closeEvent(event)

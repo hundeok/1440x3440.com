@@ -49,7 +49,7 @@ export default function Home() {
           <p style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 3rem auto', fontSize: '1.2rem', fontWeight: 'bold' }}>
             tired of finding stuff to put on your spare 1440x3440 or 3440x1440 portrait monitor?<br/>
             most vertical wallpapers are static. most apps are heavy and full of ads.<br/>
-            just use this digital frame. it's insanely lightweight and it just works.
+            just use this digital frame. it&apos;s insanely lightweight and it just works.
           </p>
 
           <div className="retro-image-frame">
@@ -96,7 +96,7 @@ export default function Home() {
             </div>
             <div style={{ border: '2px solid #000', padding: '1rem', background: '#fff' }}>
               <strong style={{ fontSize: '1.2rem', display: 'block', borderBottom: '2px solid #000', paddingBottom: '0.5rem', marginBottom: '1rem' }}>Zero_Storage</strong>
-              <span style={{ fontSize: '0.9rem' }}>doesn't eat your SSD. streams directly to memory.</span>
+              <span style={{ fontSize: '0.9rem' }}>doesn&apos;t eat your SSD. streams directly to memory.</span>
             </div>
           </div>
 
@@ -119,7 +119,7 @@ export default function Home() {
             </li>
             <li>
               <strong style={{ background: '#000', color: '#fff', padding: '4px 8px', border: '2px solid #000', marginRight: '10px' }}>[SPACE]</strong> 
-              Force Next Image (if you're impatient)
+              Force Next Image (if you&apos;re impatient)
             </li>
             <li>
               <strong style={{ background: '#000', color: '#fff', padding: '4px 8px', border: '2px solid #000', marginRight: '10px' }}>[ESC]</strong> 
@@ -130,7 +130,7 @@ export default function Home() {
           <div style={{ margin: '2rem 0 0 0', borderTop: '2px dashed #000', paddingTop: '1.5rem', fontSize: '1rem', lineHeight: '1.6' }}>
             <strong>MECHANISM:</strong><br/>
             This app fetches a manifest (`images.json`) directly from a public Cloudflare R2 bucket. It caches images strictly to RAM up to a specified limit. Slide intervals and playlist sync happen automatically in the background. <br/><br/>
-            * Don't email me for customer support. I made this for myself.
+            * Don&apos;t email me for customer support. I made this for myself.
           </div>
         </div>
       </div>

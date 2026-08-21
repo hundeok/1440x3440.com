@@ -24,29 +24,29 @@ from typing import Callable
 def bind_controls(root: tk.Tk, viewer) -> None:
     bindings: list[tuple[str, Callable]] = [
         # 탐색
-        ("<Right>",      viewer.show_next),
-        ("<Left>",       viewer.show_previous),
+        ("<Right>", viewer.show_next),
+        ("<Left>", viewer.show_previous),
         # 재생
-        ("<space>",      viewer.toggle_pause),
+        ("<space>", viewer.toggle_pause),
         # 큐레이션
-        ("f",            viewer.favorite_current),
-        ("F",            viewer.favorite_current),
-        ("x",            viewer.reject_current),
-        ("X",            viewer.reject_current),
+        ("f", viewer.favorite_current),
+        ("F", viewer.favorite_current),
+        ("x", viewer.reject_current),
+        ("X", viewer.reject_current),
         # 모드
-        ("r",            viewer.set_random_mode),
-        ("R",            viewer.set_random_mode),
-        ("s",            viewer.set_sequential_mode),
-        ("S",            viewer.set_sequential_mode),
+        ("r", viewer.set_random_mode),
+        ("R", viewer.set_random_mode),
+        ("s", viewer.set_sequential_mode),
+        ("S", viewer.set_sequential_mode),
         # 설정 패널
-        ("<Tab>",        viewer.toggle_settings),
+        ("<Tab>", viewer.toggle_settings),
         # 정보
-        ("i",            viewer.show_info),
-        ("I",            viewer.show_info),
+        ("i", viewer.show_info),
+        ("I", viewer.show_info),
         # 시스템
-        ("<Escape>",     viewer.exit_fullscreen),
-        ("q",            viewer.quit),
-        ("Q",            viewer.quit),
+        ("<Escape>", viewer.exit_fullscreen),
+        ("q", viewer.quit),
+        ("Q", viewer.quit),
     ]
 
     for key, handler in bindings:

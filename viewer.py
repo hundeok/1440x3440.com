@@ -18,11 +18,11 @@ if getattr(sys, 'frozen', False):
 
 import argparse
 import logging
-import yaml
+
+from PyQt6.QtWidgets import QApplication
 
 from app.config import AppConfig
 from app.qt_viewer import PortraitViewer
-from PyQt6.QtWidgets import QApplication
 
 
 def main() -> None:

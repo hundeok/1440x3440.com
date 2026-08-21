@@ -1,7 +1,9 @@
 """app/config.py — config.yaml 로더"""
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from pathlib import Path
+
 import yaml
 
 
@@ -20,6 +22,7 @@ class ViewerConfig:
 class CloudConfig:
     enabled: bool = False
     base_url: str = ""
+
 
 @dataclass
 class AppConfig:
@@ -76,5 +79,9 @@ class AppConfig:
         content = p.read_text(encoding="utf-8")
         content = re.sub(r'(\n\s*interval:\s*)\d+', rf'\g<1>{self.viewer.interval}', content)
         content = re.sub(r'(\n\s*effect:\s*)"?[A-Za-z0-9\s]+"?(.*)', rf'\g<1>"{self.viewer.effect}"\g<2>', content)
-        content = re.sub(r'(\n\s*wakelock:\s*)(true|false)', rf'\g<1>{"true" if self.viewer.wakelock else "false"}', content, flags=re.IGNORECASE)
+        content = re.sub(
+            r'(\n\s*wakelock:\s*)(true|false)',
+            rf'\g<1>{"true" if self.viewer.wakelock else "false"}',
+            content,
+            flags=re.IGNORECASE)
         p.write_text(content, encoding="utf-8")
