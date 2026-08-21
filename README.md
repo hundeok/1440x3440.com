@@ -19,7 +19,8 @@ So I built **PortraitFrame**. It's an insanely lightweight, borderless desktop a
 
 ## Download
 
-Get the latest stable release for Mac and Windows at [1440x3440.com](https://1440x3440.vercel.app/).
+* **Mac**: [Download 1440x3440-mac.zip](https://github.com/hundeok/1440x3440.com/releases/latest/download/1440x3440-mac.zip)
+* **Windows**: [Download 1440x3440-win.exe](https://github.com/hundeok/1440x3440.com/releases/latest/download/1440x3440-win.exe)
 
 ## Keyboard Controls
 

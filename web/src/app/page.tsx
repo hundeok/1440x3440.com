@@ -66,14 +66,14 @@ export default function Home() {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', padding: '2rem 0' }}>
-            <a href="https://github.com/hundeok/1440x3440.com/releases/latest/download/PortraitFrame-mac.zip" className="retro-btn">
+            <a href="https://github.com/hundeok/1440x3440.com/releases/latest/download/1440x3440-mac.zip" className="retro-btn">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.7 9.80005C14.7 9.80005 13.9 10.3 12.8 10.3C11.7 10.3 10.8 9.60005 9.79999 9.60005C8.39999 9.60005 7.19999 10.6 6.49999 11.8C5.09999 14.3 6.19999 18 7.59999 20C8.29999 21 9.09999 22.1 10.2 22C11.2 21.9 11.6 21.3 12.9 21.3C14.2 21.3 14.6 22 15.7 22C16.8 22 17.5 21.1 18.2 20.1C19 18.9 19.4 17.7 19.4 17.6C19.3 17.6 16.9 16.6 16.9 13.8C16.9 11.4 18.9 10.2 19 10.1C17.9 8.50005 16.1 8.30005 15.5 8.20005C14.4 8.10005 13.3 8.90005 12.6 8.90005C11.9 8.90005 11 8.20005 10.2 8.20005C9.69999 8.20005 9.19999 8.30005 8.69999 8.50005" />
                 <path d="M12.9 8.10005C13.5 7.40005 13.9 6.40005 13.8 5.40005C12.9 5.40005 11.9 5.90005 11.3 6.70005C10.8 7.30005 10.3 8.30005 10.5 9.30005C11.5 9.40005 12.4 8.80005 12.9 8.10005Z" />
               </svg>
               get mac app
             </a>
-            <a href="https://github.com/hundeok/1440x3440.com/releases/latest/download/PortraitFrame-win.exe" className="retro-btn">
+            <a href="https://github.com/hundeok/1440x3440.com/releases/latest/download/1440x3440-win.exe" className="retro-btn">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.5 5.5L10.5 4.5V11.5H2.5V5.5ZM11.5 4.3L21.5 3V11.5H11.5V4.3ZM2.5 12.5H10.5V19.5L2.5 18.5V12.5ZM11.5 12.5H21.5V21L11.5 19.7V12.5Z" />
               </svg>

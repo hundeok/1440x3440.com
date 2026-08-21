@@ -12,7 +12,7 @@ CERTIFICATE_NAME="Developer ID Application: Hundeok Cho (S4P788X68K)"
 NOTARY_PROFILE="NOTARY_CREDENTIALS"
 
 # 3. 서명할 앱 파일 이름
-APP_NAME="PortraitFrame"
+APP_NAME="1440x3440"
 APP_PATH="dist/${APP_NAME}.app"
 ZIP_PATH="dist/${APP_NAME}.zip"
 

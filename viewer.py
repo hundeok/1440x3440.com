@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-viewer.py — PortraitFrame Viewer 진입점
+viewer.py — 1440x3440.com Viewer 진입점
 
 사용법:
   python viewer.py
@@ -26,7 +26,7 @@ from app.qt_viewer import PortraitViewer
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="PortraitFrame — 1440×3440 디지털 액자")
+    parser = argparse.ArgumentParser(description="1440x3440.com — 1440×3440 디지털 액자")
     parser.add_argument("--config", default="config.yaml", help="config 파일 경로")
     args = parser.parse_args()
 

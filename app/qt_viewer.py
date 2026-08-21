@@ -57,7 +57,7 @@ class ImageLoader(QThread):
             filename = self.entry["file"]
 
             if self.cfg.cloud.enabled:
-                cache_dir = Path(os.path.expanduser("~/Library/Caches/PortraitFrame/library/images"))
+                cache_dir = Path(os.path.expanduser("~/Library/Caches/1440x3440/library/images"))
                 cache_dir.mkdir(parents=True, exist_ok=True)
                 path = str(cache_dir / filename)
 
@@ -99,7 +99,7 @@ class PortraitViewer(QMainWindow):
         self.cfg = cfg
         self.vc = cfg.viewer
 
-        self.setWindowTitle("Portrait Frame (PyQt6)")
+        self.setWindowTitle("1440x3440.com")
         self.setStyleSheet("background-color: black;")
 
         # ── UI 셋업 ────────────────────────────────────────────────
