@@ -137,7 +137,7 @@ export default function Home() {
       
       <div style={{ textAlign: 'center', marginTop: '4rem', fontWeight: 'bold', marginBottom: '2rem' }}>
         <p style={{ marginBottom: '1rem' }}>built by a guy with a spare 3440x1440 monitor.</p>
-        <a href="#coffee" style={{ display: 'inline-block', padding: '0.5rem 1rem', background: '#000', color: '#fff', textDecoration: 'none', border: '2px solid #000', boxShadow: '2px 2px 0px #aaa' }}>
+        <a href="https://ko-fi.com/hdcho" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', padding: '0.5rem 1rem', background: '#000', color: '#fff', textDecoration: 'none', border: '2px solid #000', boxShadow: '2px 2px 0px #aaa' }}>
           ☕ Buy me a coffee
         </a>
       </div>
