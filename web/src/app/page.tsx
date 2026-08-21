@@ -11,6 +11,21 @@ export default function Home() {
           <div className="mac-titlebar-text">1440x3440.com</div>
         </div>
         
+        {/* Mascots */}
+        <div className="mascot-left">
+          {/* Pacman Ghost */}
+          <svg width="80" height="80" viewBox="0 0 16 16" fill="var(--border-color)">
+            <path d="M4 1h8v1h2v1h1v8h-1v2h-2v1h-2v-1h-1v1h-2v-1H6v1H4v-1H2v-1H1V3h1V2h2V1zm2 4v2h2V5H6zm4 0v2h2V5h-2z" />
+          </svg>
+        </div>
+
+        <div className="mascot-right">
+          {/* Space Invader */}
+          <svg width="90" height="70" viewBox="0 0 11 8" fill="var(--border-color)">
+            <path d="M3 0h5v1H2v1H1v1H0v2h1v1h2V5h1V4h3v1h1v1h2V3h1V1h-1V0H8v1H3V0zm-1 3v1h1V3H2zm6 0v1h1V3H8zM2 6v1h1V6H2zm6 0v1h1V6H8z"/>
+          </svg>
+        </div>
+
         {/* Main Content */}
         <div className="mac-content">
           <div className="retro-alert">

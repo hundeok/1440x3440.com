@@ -144,3 +144,44 @@ p {
   gap: 15px;
   box-shadow: 4px 4px 0px 0px var(--border-color);
 }
+
+/* Mascot Animations */
+@keyframes floatLeft {
+  0% { transform: translateY(0) rotate(-10deg); }
+  50% { transform: translateY(-40px) rotate(10deg); }
+  100% { transform: translateY(0) rotate(-10deg); }
+}
+
+@keyframes floatRight {
+  0% { transform: translateY(0) rotate(10deg); }
+  50% { transform: translateY(50px) rotate(-15deg); }
+  100% { transform: translateY(0) rotate(10deg); }
+}
+
+.mascot-left {
+  position: fixed;
+  left: 10%;
+  top: 35%;
+  animation: floatLeft 5s ease-in-out infinite;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
+}
+
+.mascot-right {
+  position: fixed;
+  right: 10%;
+  top: 45%;
+  animation: floatRight 6s ease-in-out infinite;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
+}
+
+/* Hide mascots on smaller screens so they don't overlap the window */
+@media (max-width: 1400px) {
+  .mascot-left, .mascot-right {
+    display: none;
+  }
+}
+
