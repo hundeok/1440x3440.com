@@ -44,12 +44,12 @@ export default function Home() {
             </div>
           </div>
 
-          <h1 style={{ textAlign: 'center', marginTop: '2rem' }}>1440x3440.com</h1>
+          <h1 style={{ textAlign: 'center', marginTop: '2rem' }}>1440x3440 & 3440x1440 Vertical Wallpaper Player</h1>
           
           <p style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 3rem auto', fontSize: '1.2rem', fontWeight: 'bold' }}>
-            tired of finding stuff to put on your spare 1440x3440 monitor?<br/>
-            some apps are too heavy. some are full of ads.<br/>
-            just use this. it's insanely lightweight and it just works.
+            tired of finding stuff to put on your spare 1440x3440 or 3440x1440 portrait monitor?<br/>
+            most vertical wallpapers are static. most apps are heavy and full of ads.<br/>
+            just use this digital frame. it's insanely lightweight and it just works.
           </p>
 
           <div className="retro-image-frame">

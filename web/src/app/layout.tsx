@@ -13,8 +13,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "1440x3440 | Ultra-Wide Vertical Streaming",
-  description: "A kitsch yet highly polished digital frame specialized for 1440x3440 portrait displays. Zero latency, zero footprint.",
+  title: "1440x3440 & 3440x1440 Vertical Wallpaper Player | PortraitFrame",
+  description: "The ultimate digital frame for 1440x3440 and 3440x1440 vertical portrait monitors. Stream beautiful vertical wallpapers and backgrounds with zero latency.",
+  keywords: ["1440x3440 wallpaper", "3440x1440 wallpaper vertical", "portrait monitor backgrounds", "vertical wallpapers", "digital frame app", "portrait display", "ultra-wide vertical"],
+  openGraph: {
+    title: "1440x3440 Vertical Wallpaper Player",
+    description: "Tired of finding stuff to put on your spare 1440x3440 monitor? Stream beautiful vertical wallpapers effortlessly.",
+    url: "https://1440x3440.vercel.app",
+    siteName: "1440x3440 PortraitFrame",
+    images: [
+      {
+        url: "/hero-v2.jpg",
+        width: 1024,
+        height: 1024,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "1440x3440 Vertical Wallpaper Player",
+    description: "The best lightweight app for your vertical 1440x3440 monitors.",
+    images: ["/hero-v2.jpg"],
+  },
+  alternates: {
+    canonical: "https://1440x3440.vercel.app",
+  },
 };
 
 export default function RootLayout({
