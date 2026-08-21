@@ -74,9 +74,11 @@ export default function Home() {
             </a>
             <a href="#download-appstore" className="retro-btn" style={{ background: '#000', color: '#fff', boxShadow: '3px 3px 0px 0px #aaa' }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 4H8C5.79 4 4 5.79 4 8V16C4 18.21 5.79 20 8 20H16C18.21 20 20 18.21 20 16V8C20 5.79 18.21 4 16 4ZM15 13H9V11H15V13Z" />
+                <path d="M14.7 9.80005C14.7 9.80005 13.9 10.3 12.8 10.3C11.7 10.3 10.8 9.60005 9.79999 9.60005C8.39999 9.60005 7.19999 10.6 6.49999 11.8C5.09999 14.3 6.19999 18 7.59999 20C8.29999 21 9.09999 22.1 10.2 22C11.2 21.9 11.6 21.3 12.9 21.3C14.2 21.3 14.6 22 15.7 22C16.8 22 17.5 21.1 18.2 20.1C19 18.9 19.4 17.7 19.4 17.6C19.3 17.6 16.9 16.6 16.9 13.8C16.9 11.4 18.9 10.2 19 10.1C17.9 8.50005 16.1 8.30005 15.5 8.20005C14.4 8.10005 13.3 8.90005 12.6 8.90005C11.9 8.90005 11 8.20005 10.2 8.20005C9.69999 8.20005 9.19999 8.30005 8.69999 8.50005" />
+                <path d="M12.9 8.10005C13.5 7.40005 13.9 6.40005 13.8 5.40005C12.9 5.40005 11.9 5.90005 11.3 6.70005C10.8 7.30005 10.3 8.30005 10.5 9.30005C11.5 9.40005 12.4 8.80005 12.9 8.10005Z" />
               </svg>
               Mac App Store
+
             </a>
           </div>
 
@@ -127,7 +129,10 @@ export default function Home() {
       </div>
       
       <div style={{ textAlign: 'center', marginTop: '4rem', fontWeight: 'bold', marginBottom: '2rem' }}>
-        built by a guy with a spare 1440x3440 monitor.
+        <p style={{ marginBottom: '1rem' }}>built by a guy with a spare 3440x1440 monitor.</p>
+        <a href="#coffee" style={{ display: 'inline-block', padding: '0.5rem 1rem', background: '#000', color: '#fff', textDecoration: 'none', border: '2px solid #000', boxShadow: '2px 2px 0px #aaa' }}>
+          ☕ Buy me a coffee
+        </a>
       </div>
     </main>
   );
