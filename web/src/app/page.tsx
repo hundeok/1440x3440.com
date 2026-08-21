@@ -8,7 +8,7 @@ export default function Home() {
         {/* Title Bar */}
         <div className="mac-titlebar">
           <div className="mac-close-btn"></div>
-          <div className="mac-titlebar-text">3440x1440.com</div>
+          <div className="mac-titlebar-text">1440x3440.com</div>
         </div>
         
         {/* Main Content */}
@@ -22,10 +22,10 @@ export default function Home() {
             </div>
           </div>
 
-          <h1 style={{ textAlign: 'center', marginTop: '2rem' }}>3440x1440.com</h1>
+          <h1 style={{ textAlign: 'center', marginTop: '2rem' }}>1440x3440.com</h1>
           
           <p style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 3rem auto', fontSize: '1.2rem', fontWeight: 'bold' }}>
-            tired of finding stuff to put on your spare 3440x1440 monitor?<br/>
+            tired of finding stuff to put on your spare 1440x3440 monitor?<br/>
             some apps are too heavy. some are full of ads.<br/>
             just use this. it's insanely lightweight and it just works.
           </p>
@@ -34,7 +34,7 @@ export default function Home() {
             <div className="retro-image-inner">
               <Image 
                 src="/hero-v2.jpg" 
-                alt="3440x1440 App Interface" 
+                alt="1440x3440 App Interface" 
                 width={1024} 
                 height={1024}
                 style={{ width: '100%', height: 'auto', display: 'block', filter: 'contrast(1.1) saturate(0.9)' }}
@@ -80,7 +80,7 @@ export default function Home() {
       </div>
       
       <div style={{ textAlign: 'center', marginTop: '4rem', fontWeight: 'bold', marginBottom: '2rem' }}>
-        built by a guy with a spare 3440x1440 monitor.
+        built by a guy with a spare 1440x3440 monitor.
       </div>
     </main>
   );
