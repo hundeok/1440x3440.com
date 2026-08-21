@@ -26,6 +26,13 @@ export default function Home() {
           </svg>
         </div>
 
+        <div className="mascot-left-2">
+          {/* Pixel Skull / Robot */}
+          <svg width="60" height="60" viewBox="0 0 16 16" fill="var(--border-color)">
+            <path d="M3 3h10v2h2v4h-2v2h-2v2h-2v-2h-2v2H5v-2H3v-2H1V5h2V3zM4 6h2v2H4V6zm6 0h2v2h-2V6z" />
+          </svg>
+        </div>
+
         {/* Main Content */}
         <div className="mac-content">
           <div className="retro-alert">

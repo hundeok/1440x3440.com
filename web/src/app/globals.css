@@ -178,9 +178,19 @@ p {
   filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
 }
 
+.mascot-left-2 {
+  position: fixed;
+  left: 13%;
+  top: 65%;
+  animation: floatLeft 4.5s ease-in-out infinite reverse;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
+}
+
 /* Hide mascots on smaller screens so they don't overlap the window */
 @media (max-width: 1400px) {
-  .mascot-left, .mascot-right {
+  .mascot-left, .mascot-right, .mascot-left-2 {
     display: none;
   }
 }
