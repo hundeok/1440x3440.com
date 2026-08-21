@@ -13,3 +13,6 @@ env/
 # Caches
 library_backup/
 *.webp
+build/
+dist/
+*.spec

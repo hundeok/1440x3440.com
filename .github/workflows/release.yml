@@ -20,7 +20,7 @@ jobs:
         pip install -r requirements.txt
     - name: Build Mac App
       run: |
-        pyinstaller --windowed --name PortraitFrame --icon=icon.icns viewer.py
+        pyinstaller -y --windowed --name PortraitFrame --icon=icon.icns viewer.py
     - name: Zip Mac App
       run: |
         cd dist
