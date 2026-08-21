@@ -20,6 +20,7 @@ So I built **PortraitFrame**. It's an insanely lightweight, borderless desktop a
 ## Download
 
 * **Mac**: [Download 1440x3440-mac.zip](https://github.com/hundeok/1440x3440.com/releases/latest/download/1440x3440-mac.zip)
+  * *Note for Mac users:* Since this is an indie app, macOS might show a warning ("Apple cannot check it for malicious software"). To open it, simply **Right-click (or Control-click) the app and select "Open"**. 
 * **Windows**: [Download 1440x3440-win.exe](https://github.com/hundeok/1440x3440.com/releases/latest/download/1440x3440-win.exe)
 
 ## Keyboard Controls
