@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "1440x3440 | Ultra-Wide Vertical Streaming",
-  description: "A kitsch yet highly polished digital frame specialized for 1440x3440 portrait displays. Zero latency, zero footprint.",
+  title: "3440x1440 | Ultra-Wide Vertical Streaming",
+  description: "A kitsch yet highly polished digital frame specialized for 3440x1440 portrait displays. Zero latency, zero footprint.",
 };
 
 export default function RootLayout({
