@@ -726,5 +726,10 @@ class PortraitViewer(QMainWindow):
         if hasattr(self, '_prefetcher') and self._prefetcher.isRunning():
             self._prefetcher.quit()
             self._prefetcher.wait()
+            
+        for zombie in getattr(self, '_zombie_threads', []):
+            if zombie.isRunning():
+                zombie.quit()
+                zombie.wait()
 
         super().closeEvent(event)
