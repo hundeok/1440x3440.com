@@ -238,13 +238,9 @@ class PortraitViewer(QMainWindow):
 
         self._load_playlist()
         if self.vc.mode == "random":
+            import random
             random.shuffle(self._playlist)
         self._load_next(first=True)
-
-        self.loading_shadow.hide()
-        self.loading_bg.hide()
-        self.loading_text.hide()
-        self._is_loading = False
 
     def _hide_menus(self):
         self.osd_text_item.hide()
@@ -320,6 +316,12 @@ class PortraitViewer(QMainWindow):
         self.loader.start(QThread.Priority.LowPriority)
 
     def _on_image_ready(self, entry, qimg, is_first, load_ms):
+        if getattr(self, '_is_loading', False):
+            self.loading_shadow.hide()
+            self.loading_bg.hide()
+            self.loading_text.hide()
+            self._is_loading = False
+
         self._last_load_ms = load_ms
         self._cur_entry = entry
         pixmap = QPixmap.fromImage(qimg)
