@@ -643,10 +643,14 @@ class PortraitViewer(QMainWindow):
         # 1. 모든 타이머 정지 (메모리 릭 방지)
         if self._sleep_timer:
             self._sleep_timer.stop()
-        self.slide_timer.stop()
-        self.hide_timer.stop()
+        if hasattr(self, 'slide_timer'):
+            self.slide_timer.stop()
+        if hasattr(self, 'hide_timer'):
+            self.hide_timer.stop()
         if hasattr(self, 'settings_hide_timer'):
             self.settings_hide_timer.stop()
+        if hasattr(self, 'loading_timer'):
+            self.loading_timer.stop()
 
         # 2. 진행 중인 애니메이션 강제 종료 (QVariantAnimation C++ 파괴 충돌 방지)
         if hasattr(self, 'anim'):
@@ -657,7 +661,11 @@ class PortraitViewer(QMainWindow):
 
         # 4. 백그라운드 스레드 안전 종료 대기 (Destroyed while thread is running 에러 방지)
         if hasattr(self, 'loader') and self.loader.isRunning():
+            try:
+                self.loader.ready.disconnect()
+            except TypeError:
+                pass
             self.loader.quit()
-            self.loader.wait()  # 200ms 시간 제한 해제 (대용량 이미지 읽기 완료 보장)
+            self.loader.wait()  # 스레드가 끝날 때까지 안전하게 대기
 
         super().closeEvent(event)
