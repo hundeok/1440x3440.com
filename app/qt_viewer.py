@@ -92,6 +92,36 @@ class ImageLoader(QThread):
         except Exception as e:
             logger.error(f"Image load error: {e}")
 
+class PrefetchLoader(QThread):
+    def __init__(self, cfg: AppConfig, entry: dict):
+        super().__init__()
+        self.cfg = cfg
+        self.entry = entry
+
+    def run(self):
+        try:
+            if not self.cfg.cloud.enabled:
+                return
+
+            filename = self.entry["file"]
+            cache_dir = Path(os.path.expanduser("~/Library/Caches/1440x3440/library/images"))
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            path = str(cache_dir / filename)
+
+            if not os.path.exists(path):
+                import urllib.parse
+                folder_name = urllib.parse.quote(self.cfg.images_dir.name)
+                file_name_encoded = urllib.parse.quote(filename)
+                url = f"{self.cfg.cloud.base_url}/{folder_name}/{file_name_encoded}"
+                ctx = ssl.create_default_context()
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req, context=ctx) as response, open(path, 'wb') as out_file:
+                    out_file.write(response.read())
+        except Exception as e:
+            logger.debug(f"Prefetch error (ignored): {e}")
+
 
 class PortraitViewer(QMainWindow):
     def __init__(self, cfg: AppConfig):
@@ -324,12 +354,18 @@ class PortraitViewer(QMainWindow):
 
         logger.info("Playlist: %d images", len(self._playlist))
 
-    def _get_entry(self, delta: int) -> Optional[dict]:
+    def _get_entry(self, delta: int = 0) -> Optional[dict]:
         n = len(self._playlist)
         if not n:
             return None
         self._idx = (self._idx + delta) % n
         return self._playlist[self._idx]
+
+    def _peek_next_entry(self) -> Optional[dict]:
+        n = len(self._playlist)
+        if not n:
+            return None
+        return self._playlist[(self._idx + 1) % n]
 
     # ── 이미지 로딩 ─────────────────────────────────────────────
     def _load_next(self, first=False):
@@ -357,6 +393,12 @@ class PortraitViewer(QMainWindow):
         self._last_load_ms = load_ms
         self._cur_entry = entry
         pixmap = QPixmap.fromImage(qimg)
+
+        # [Prefetch] 현재 이미지가 렌더링 준비되면 다음 이미지를 미리 백그라운드 다운로드
+        next_entry = self._peek_next_entry()
+        if next_entry and self.cfg.cloud.enabled:
+            self._prefetcher = PrefetchLoader(self.cfg, next_entry)
+            self._prefetcher.start(QThread.Priority.IdlePriority)
 
         if EFFECTS[self._ef] != "None" and not is_first and not self.cur_item.pixmap().isNull():
             # 이전 이미지 백업
@@ -667,5 +709,9 @@ class PortraitViewer(QMainWindow):
                 pass
             self.loader.quit()
             self.loader.wait()  # 스레드가 끝날 때까지 안전하게 대기
+
+        if hasattr(self, '_prefetcher') and self._prefetcher.isRunning():
+            self._prefetcher.quit()
+            self._prefetcher.wait()
 
         super().closeEvent(event)
