@@ -20,8 +20,8 @@ class ViewerConfig:
 
 @dataclass
 class CloudConfig:
-    enabled: bool = False
-    base_url: str = ""
+    enabled: bool = True
+    base_url: str = "https://pub-0c293c2317874e6db6239ef7fb9d1990.r2.dev"
 
 
 @dataclass
@@ -36,7 +36,7 @@ class AppConfig:
     def from_yaml(cls, path: str = "config.yaml") -> "AppConfig":
         p = Path(path)
         if not p.exists():
-            raise FileNotFoundError(f"config.yaml not found: {p.resolve()}")
+            return cls()
         with p.open("r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
 
