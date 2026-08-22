@@ -5,31 +5,13 @@ on:
     tags:
       - 'v*'
 
-jobs:
-  build-mac:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Build Mac App
-      run: |
-        pyinstaller --noconfirm --onedir --windowed --name "1440x3440" --add-data "app:app" viewer.py
-        cd dist
-        zip -r 1440x3440-mac.zip 1440x3440.app/
-    - name: Upload Mac Build
-      uses: softprops/action-gh-release@v1
-      with:
-        files: dist/1440x3440-mac.zip
 
+
+jobs:
   build-win:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -49,27 +31,4 @@ jobs:
       with:
         files: dist/1440x3440-win.exe
 
-  release:
-    needs: [build-mac, build-win]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-    - name: Download Mac Artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: mac-app
-        path: ./artifacts
-    - name: Download Windows Artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: win-exe
-        path: ./artifacts
-    - name: Create Release and Upload Assets
-      uses: softprops/action-gh-release@v2
-      with:
-        files: |
-          ./artifacts/PortraitFrame-mac.zip
-          ./artifacts/PortraitFrame-win.exe
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
