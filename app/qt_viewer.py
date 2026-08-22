@@ -277,6 +277,8 @@ class PortraitViewer(QMainWindow):
         self.loading_anim_state = 0
         self.loading_timer.timeout.connect(self._animate_loading)
         self.loading_timer.start(250)
+        
+        self._zombie_threads = []
 
         # 실행 시작 (세로 모니터 비율 1440x3440에 맞춰 400x955로 초기화)
         self.resize(400, 955)
@@ -379,6 +381,15 @@ class PortraitViewer(QMainWindow):
             self._start_loader(entry, False)
 
     def _start_loader(self, entry, first):
+        if hasattr(self, 'loader') and self.loader.isRunning():
+            try:
+                self.loader.ready.disconnect()
+            except TypeError:
+                pass
+            self._zombie_threads.append(self.loader)
+            
+        self._zombie_threads = [t for t in self._zombie_threads if t.isRunning()]
+            
         self.loader = ImageLoader(self.cfg, entry, first)
         self.loader.ready.connect(self._on_image_ready)
         # [Optimization 2] 백그라운드 스레드 우선순위 강등: 메인 스레드 60fps 애니메이션 간섭 차단
@@ -397,6 +408,8 @@ class PortraitViewer(QMainWindow):
         # [Prefetch] 현재 이미지가 렌더링 준비되면 다음 이미지를 미리 백그라운드 다운로드
         next_entry = self._peek_next_entry()
         if next_entry and self.cfg.cloud.enabled:
+            if hasattr(self, '_prefetcher') and self._prefetcher.isRunning():
+                self._zombie_threads.append(self._prefetcher)
             self._prefetcher = PrefetchLoader(self.cfg, next_entry)
             self._prefetcher.start(QThread.Priority.IdlePriority)
 
