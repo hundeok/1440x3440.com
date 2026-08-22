@@ -205,8 +205,9 @@ class PortraitViewer(QMainWindow):
         self.settings_hide_timer.setSingleShot(True)
         self.settings_hide_timer.timeout.connect(self._hide_menus)
 
-        # ── Loading Screen (Neo Brutalism) ─────────────────────────
+        # ── Loading Screen (Neo Brutalism Mac Style) ─────────────────────────
         self._is_loading = True
+        
         self.loading_shadow = QGraphicsRectItem()
         self.loading_shadow.setBrush(QColor(0, 0, 0))
         self.loading_shadow.setPen(QPen(Qt.PenStyle.NoPen))
@@ -214,17 +215,38 @@ class PortraitViewer(QMainWindow):
         self.scene.addItem(self.loading_shadow)
 
         self.loading_bg = QGraphicsRectItem()
-        self.loading_bg.setBrush(QColor(255, 255, 255))
-        self.loading_bg.setPen(QPen(QColor(0, 0, 0), 3))
+        self.loading_bg.setBrush(QColor(240, 240, 240)) # Mac Light Gray
+        self.loading_bg.setPen(QPen(QColor(0, 0, 0), 2)) # 2px solid border
         self.loading_bg.setZValue(200)
         self.scene.addItem(self.loading_bg)
 
-        self.loading_text = QGraphicsTextItem()
-        self.loading_text.setDefaultTextColor(QColor(0, 0, 0))
-        self.loading_text.setFont(QFont("Menlo", 15, QFont.Weight.Bold))
-        self.loading_text.setZValue(201)
-        self.loading_text.setPlainText(" FETCHING \n 1440x3440... ")
-        self.scene.addItem(self.loading_text)
+        self.loading_titlebar = QGraphicsRectItem(self.loading_bg)
+        self.loading_titlebar.setBrush(QColor(255, 255, 255))
+        self.loading_titlebar.setPen(QPen(QColor(0, 0, 0), 2))
+
+        self.loading_title_text = QGraphicsTextItem(self.loading_titlebar)
+        self.loading_title_text.setDefaultTextColor(QColor(0, 0, 0))
+        self.loading_title_text.setFont(QFont("Menlo", 10, QFont.Weight.Bold))
+        self.loading_title_text.setPlainText("1440x3440.com")
+
+        self.loading_close_btn = QGraphicsRectItem(self.loading_titlebar)
+        self.loading_close_btn.setBrush(QColor(255, 255, 255))
+        self.loading_close_btn.setPen(QPen(QColor(0, 0, 0), 2))
+
+        self.loading_face = QGraphicsTextItem(self.loading_bg)
+        self.loading_face.setDefaultTextColor(QColor(0, 0, 0))
+        self.loading_face.setFont(QFont("Menlo", 26, QFont.Weight.Bold))
+        self.loading_face.setPlainText("( ⌐■_■)")
+
+        self.loading_subtext = QGraphicsTextItem(self.loading_bg)
+        self.loading_subtext.setDefaultTextColor(QColor(0, 0, 0))
+        self.loading_subtext.setFont(QFont("Menlo", 12, QFont.Weight.Bold))
+        self.loading_subtext.setPlainText("FETCHING IMAGES...")
+
+        self.loading_timer = QTimer(self)
+        self.loading_anim_state = 0
+        self.loading_timer.timeout.connect(self._animate_loading)
+        self.loading_timer.start(250)
 
         # 실행 시작 (세로 모니터 비율 1440x3440에 맞춰 400x955로 초기화)
         self.resize(400, 955)
@@ -247,6 +269,17 @@ class PortraitViewer(QMainWindow):
         self.settings_bg_item.hide()
         self.settings_text_item.hide()
         self._settings_visible = False
+
+    def _animate_loading(self):
+        if not getattr(self, '_is_loading', False):
+            self.loading_timer.stop()
+            return
+        faces = ["( ⌐■_■)", "( >‿◠)", "( ˘ ³˘)♥", "( ಠ_ಠ)", "( º_º )", "( ^_^)"]
+        self.loading_anim_state = (self.loading_anim_state + 1) % len(faces)
+        self.loading_face.setPlainText(faces[self.loading_anim_state])
+        w = 320
+        fw = self.loading_face.boundingRect().width()
+        self.loading_face.setPos((w - fw) / 2, 60)
 
     def _osd(self, text: str, duration_sec: float = 2.0):
         self.osd_text_item.setPlainText(text)
@@ -319,7 +352,6 @@ class PortraitViewer(QMainWindow):
         if getattr(self, '_is_loading', False):
             self.loading_shadow.hide()
             self.loading_bg.hide()
-            self.loading_text.hide()
             self._is_loading = False
 
         self._last_load_ms = load_ms
@@ -437,14 +469,26 @@ class PortraitViewer(QMainWindow):
             self.settings_bg_item.setRect(0, rect.height() - bg_h, rect.width(), bg_h)
             
         if getattr(self, '_is_loading', False):
-            tw = self.loading_text.boundingRect().width()
-            th = self.loading_text.boundingRect().height()
-            w, h = tw + 40, th + 20
+            w, h = 320, 180
             cx, cy = rect.width() / 2, rect.height() / 2
             
-            self.loading_bg.setRect(cx - w/2, cy - h/2, w, h)
-            self.loading_shadow.setRect(cx - w/2 + 6, cy - h/2 + 6, w, h)
-            self.loading_text.setPos(cx - tw/2, cy - th/2)
+            self.loading_bg.setRect(0, 0, w, h)
+            self.loading_bg.setPos(cx - w/2, cy - h/2)
+            
+            self.loading_shadow.setRect(0, 0, w, h)
+            self.loading_shadow.setPos(cx - w/2 + 6, cy - h/2 + 6)
+            
+            self.loading_titlebar.setRect(0, 0, w, 24)
+            self.loading_close_btn.setRect(8, 6, 12, 12)
+            
+            tw = self.loading_title_text.boundingRect().width()
+            self.loading_title_text.setPos((w - tw) / 2, 2)
+            
+            fw = self.loading_face.boundingRect().width()
+            self.loading_face.setPos((w - fw) / 2, 60)
+            
+            sw = self.loading_subtext.boundingRect().width()
+            self.loading_subtext.setPos((w - sw) / 2, 130)
 
     def _fit_item(self, item: QGraphicsPixmapItem):
         rect = self.view.viewport().rect()
