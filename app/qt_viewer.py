@@ -434,6 +434,7 @@ class PortraitViewer(QMainWindow):
             self.settings_text_item.setPos((rect.width() - w) / 2, text_y)
 
             bg_h = h + 60
+            self.settings_bg_item.setRect(0, rect.height() - bg_h, rect.width(), bg_h)
             
         if getattr(self, '_is_loading', False):
             tw = self.loading_text.boundingRect().width()
@@ -444,7 +445,6 @@ class PortraitViewer(QMainWindow):
             self.loading_bg.setRect(cx - w/2, cy - h/2, w, h)
             self.loading_shadow.setRect(cx - w/2 + 6, cy - h/2 + 6, w, h)
             self.loading_text.setPos(cx - tw/2, cy - th/2)
-            self.settings_bg_item.setRect(0, rect.height() - bg_h, rect.width(), bg_h)
 
     def _fit_item(self, item: QGraphicsPixmapItem):
         rect = self.view.viewport().rect()
