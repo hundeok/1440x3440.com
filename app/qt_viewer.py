@@ -205,12 +205,43 @@ class PortraitViewer(QMainWindow):
         self.settings_hide_timer.setSingleShot(True)
         self.settings_hide_timer.timeout.connect(self._hide_menus)
 
+        # ── Loading Screen (Neo Brutalism) ─────────────────────────
+        self._is_loading = True
+        self.loading_shadow = QGraphicsRectItem()
+        self.loading_shadow.setBrush(QColor(0, 0, 0))
+        self.loading_shadow.setPen(QPen(Qt.PenStyle.NoPen))
+        self.loading_shadow.setZValue(199)
+        self.scene.addItem(self.loading_shadow)
+
+        self.loading_bg = QGraphicsRectItem()
+        self.loading_bg.setBrush(QColor(255, 255, 255))
+        self.loading_bg.setPen(QPen(QColor(0, 0, 0), 3))
+        self.loading_bg.setZValue(200)
+        self.scene.addItem(self.loading_bg)
+
+        self.loading_text = QGraphicsTextItem()
+        self.loading_text.setDefaultTextColor(QColor(0, 0, 0))
+        self.loading_text.setFont(QFont("Menlo", 15, QFont.Weight.Bold))
+        self.loading_text.setZValue(201)
+        self.loading_text.setPlainText(" FETCHING \n 1440x3440... ")
+        self.scene.addItem(self.loading_text)
+
         # 실행 시작 (세로 모니터 비율 1440x3440에 맞춰 400x955로 초기화)
+        self.resize(400, 955)
+
+        # UI가 먼저 그려지도록 100ms 지연 후 다운로드 시작
+        QTimer.singleShot(100, self._init_startup)
+
+    def _init_startup(self):
         self._load_playlist()
         if self.vc.mode == "random":
             random.shuffle(self._playlist)
-        self.resize(400, 955)
         self._load_next(first=True)
+
+        self.loading_shadow.hide()
+        self.loading_bg.hide()
+        self.loading_text.hide()
+        self._is_loading = False
 
     def _hide_menus(self):
         self.osd_text_item.hide()
@@ -398,6 +429,16 @@ class PortraitViewer(QMainWindow):
             self.settings_text_item.setPos((rect.width() - w) / 2, text_y)
 
             bg_h = h + 60
+            
+        if getattr(self, '_is_loading', False):
+            tw = self.loading_text.boundingRect().width()
+            th = self.loading_text.boundingRect().height()
+            w, h = tw + 40, th + 20
+            cx, cy = rect.width() / 2, rect.height() / 2
+            
+            self.loading_bg.setRect(cx - w/2, cy - h/2, w, h)
+            self.loading_shadow.setRect(cx - w/2 + 6, cy - h/2 + 6, w, h)
+            self.loading_text.setPos(cx - tw/2, cy - th/2)
             self.settings_bg_item.setRect(0, rect.height() - bg_h, rect.width(), bg_h)
 
     def _fit_item(self, item: QGraphicsPixmapItem):
