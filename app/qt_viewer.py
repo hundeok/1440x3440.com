@@ -229,10 +229,13 @@ class PortraitViewer(QMainWindow):
         # 실행 시작 (세로 모니터 비율 1440x3440에 맞춰 400x955로 초기화)
         self.resize(400, 955)
 
-        # UI가 먼저 그려지도록 100ms 지연 후 다운로드 시작
-        QTimer.singleShot(100, self._init_startup)
+        # UI가 확실히 그려질 수 있도록 500ms 딜레이를 주고 부팅 감성을 더함
+        QTimer.singleShot(500, self._init_startup)
 
     def _init_startup(self):
+        from PyQt6.QtWidgets import QApplication
+        QApplication.processEvents()  # 강제로 UI 페인트 업데이트
+
         self._load_playlist()
         if self.vc.mode == "random":
             random.shuffle(self._playlist)
