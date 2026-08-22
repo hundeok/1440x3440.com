@@ -71,8 +71,12 @@ class ImageLoader(QThread):
                     ctx.check_hostname = False
                     ctx.verify_mode = ssl.CERT_NONE
                     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-                    with urllib.request.urlopen(req, context=ctx) as response, open(path, 'wb') as out_file:
+                    
+                    tmp_path = path + '.tmp'
+                    with urllib.request.urlopen(req, context=ctx, timeout=10) as response, open(tmp_path, 'wb') as out_file:
                         out_file.write(response.read())
+                    os.replace(tmp_path, path)
+                    
                     self._manage_cache_size(cache_dir)
                 else:
                     # Update atime
@@ -117,8 +121,11 @@ class PrefetchLoader(QThread):
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
                 req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-                with urllib.request.urlopen(req, context=ctx) as response, open(path, 'wb') as out_file:
+                
+                tmp_path = path + '.tmp'
+                with urllib.request.urlopen(req, context=ctx, timeout=10) as response, open(tmp_path, 'wb') as out_file:
                     out_file.write(response.read())
+                os.replace(tmp_path, path)
         except Exception as e:
             logger.debug(f"Prefetch error (ignored): {e}")
 
@@ -330,7 +337,7 @@ class PortraitViewer(QMainWindow):
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
                 req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-                with urllib.request.urlopen(req, context=ctx) as response:
+                with urllib.request.urlopen(req, context=ctx, timeout=10) as response:
                     self._db = json.loads(response.read().decode('utf-8'))
             except Exception as e:
                 logger.error(f"Failed to fetch cloud images.json: {e}")
@@ -400,6 +407,12 @@ class PortraitViewer(QMainWindow):
             self.loading_shadow.hide()
             self.loading_bg.hide()
             self._is_loading = False
+            
+        if qimg.isNull():
+            logger.warning(f"Image {entry.get('file', 'Unknown')} is corrupted or missing. Skipping...")
+            self._osd("⚠ Image Corrupted. Skipping...", 2.0)
+            QTimer.singleShot(2000, self._load_next)
+            return
 
         self._last_load_ms = load_ms
         self._cur_entry = entry
@@ -674,8 +687,8 @@ class PortraitViewer(QMainWindow):
         if enable:
             if not self._caffeinate_proc:
                 try:
-                    self._caffeinate_proc = subprocess.Popen(["caffeinate", "-d"])
-                    logger.info("Wakelock ON (caffeinate -d started)")
+                    self._caffeinate_proc = subprocess.Popen(["caffeinate", "-d", "-w", str(os.getpid())])
+                    logger.info(f"Wakelock ON (caffeinate -d -w {os.getpid()} started)")
                 except Exception as e:
                     logger.warning(f"caffeinate failed: {e}")
         else:
