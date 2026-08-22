@@ -24,11 +24,8 @@ jobs:
         pip install -r requirements.txt
     - name: Build Windows Exe
       run: |
-        pyinstaller --noconfirm --onefile --windowed --name "1440x3440" --add-data "app;app" viewer.py
-        Move-Item dist\1440x3440.exe dist\1440x3440-win.exe
+        pyinstaller --noconfirm --onefile --windowed --icon=icon.ico --name "1440x3440-win" --add-data "app;app" viewer.py
     - name: Upload Windows Build
       uses: softprops/action-gh-release@v1
       with:
         files: dist/1440x3440-win.exe
-
-
